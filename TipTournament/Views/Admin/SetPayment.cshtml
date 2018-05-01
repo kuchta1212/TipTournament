@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNet.Identity
+@using TipTournament.Models
+
+@{
+    ViewBag.Title = "SetPayment";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>SetPayment</h2>
+<div class="datagrid">
+    <table>
+        <tbody>
+        @{ int index = 1; }
+
+            @foreach (var payment in ViewBag.Payment as List<PayedModel>)
+            {
+                if (index == 0)
+                {
+                    using (Ajax.BeginForm("SubmitPayment", "Admin", new AjaxOptions {UpdateTargetId = "ResultTag"}))
+                    {
+                        <tr>
+                            <td>
+                                @ViewBag.Users.GetUserName(@payment.UserId)
+                            </td>
+                            <td Id="ResultTag">
+                                <input id="isPayed" name="isPayed" type="checkbox" checked="@payment.IsPayed">
+                                <textarea id="PaymentId" name="PaymentId" style="display: none;">@payment.Id</textarea>
+                            </td>
+                            <td>
+                                <button>Ulož</button>
+                            </td>
+
+                        </tr>
+                    }
+                    index++;
+                }
+                else
+                {
+                    using (Ajax.BeginForm("SubmitPayment", "Admin", new AjaxOptions {UpdateTargetId = "ResultTag"}))
+                    {
+                        <tr class="alt">
+                            <td>
+                               @ViewBag.Users.GetUserName(@payment.UserId)
+                            </td>
+                            <td Id="ResultTag">
+                                <input type="checkbox" checked="@payment.IsPayed">
+                                <textarea id="PaymentId" name="PaymentId" style="display: none;">@payment.Id</textarea>
+                            </td>
+                            <td>
+                                <button>Ulož</button>
+                            </td>
+
+                        </tr>
+                        index = 0;
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+

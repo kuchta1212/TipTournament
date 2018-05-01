@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNet.Identity
+@using TipTournament.Controllers
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @if (PayedController.Payed(User.Identity.GetUserId()))
+                {
+                    @Html.ActionLink("Zaplaceno!", "Index", "Home", null, new { @class = "isPayed" })
+                }
+                else
+                {
+                    @Html.ActionLink("NEZAPLACENO!","Index","Home", null, new {@class =  "notPayed"})
+               }
+            </li>
+            <li>
+                @Html.ActionLink("Nazdar " + User.Identity.GetUserName() + "!", "Index", "Home", routeValues: null, htmlAttributes: new {id = "userLink"})
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Odhlásit se</a></li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Registrovat", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Přihlásit se", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

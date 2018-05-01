@@ -1,0 +1,99 @@
+﻿@using TipTournament.Models
+@{
+    ViewBag.Title = "SetResultsView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <p class="lead">Nastavení mojích výsledků - POZOR lze pouze JEDNOU</p>
+</div>
+@if (!ViewBag.Message.Equals("OK"))
+{
+    <p class="lead">POSRALO SE TO! ='(</p>
+    <p> @ViewBag.Message </p>
+}
+else
+{
+    <div align="center">
+        <h2>Seznam zápasů</h2>
+        <div class="datagrid">
+            <table>
+                <tbody>
+                @{ var index = 0; }
+                @foreach (var match in ViewBag.Matches as List<MatchModel>)
+                {
+                    if (index == 0)
+                    {
+                        using (Ajax.BeginForm("SubmitResults", "Home", new AjaxOptions {UpdateTargetId = "ResultTag"}))
+                        {
+                            <tr>
+                                <td>
+                                    @match.TeamOne
+                                </td>
+                                <td>
+                                    @match.TeamTwo
+                                </td>
+                                @if (@ViewBag.EstimatedResults.HasEstimatedResultForMatch(match.Id))
+                                {
+                                    <td Id="ResultTag">
+                                        @ViewBag.EstimatedResults.GetByMatchId(match.Id).ToString()
+                                    </td>
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td Id="ResultTag">
+                                        @Html.DropDownList("Num1", new SelectList(new string[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}))
+                                        :
+                                        @Html.DropDownList("Num2", new SelectList(new string[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}))
+                                        <textarea id="MatchId" name="MatchId" style="display: none;">@match.Id</textarea>
+                                    </td>
+                                    <td>
+                                        <button>Ulož</button>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                        index++;
+                    }
+                    else
+                    {
+                        using (Ajax.BeginForm("SubmitResults", "Home", new AjaxOptions {UpdateTargetId = "ResultTag"}))
+                        {
+                            <tr class="alt">
+                                <td>
+                                    @match.TeamOne
+                                </td >
+                                <td >
+                                    @match.TeamTwo
+                                </td >
+                                @if (@ViewBag.EstimatedResults.HasEstimatedResultForMatch(match.Id))
+                                {
+                                    <td Id="ResultTag">
+                                        @ViewBag.EstimatedResults.GetByMatchId(match.Id).ToString()
+                                    </td>
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td Id="ResultTag">
+                                        @Html.DropDownList("Num1", new SelectList(new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }))
+                                        :
+                                        @Html.DropDownList("Num2", new SelectList(new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }))
+                                        <textarea id="MatchId" name="MatchId" style="display: none;">@match.Id</textarea>
+                                    </td>
+                                    <td>
+                                        <button>Ulož</button>
+                                    </td>
+                                }
+                            </tr>
+                            index = 0;
+                        }
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+

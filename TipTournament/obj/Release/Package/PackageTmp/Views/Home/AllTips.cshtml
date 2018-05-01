@@ -1,0 +1,52 @@
+﻿@using System.Web.UI.WebControls.WebParts
+@using TipTournament.Models
+
+@{
+    ViewBag.Title = "AllTips";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="jumbotron">
+    <h1>Tipy všech účastníků</h1>
+</div>
+    <div align="center">
+        <div class="datagridTips">
+            <table>
+                <thead>
+                    <tr>
+                        @{ var colLimit = ViewBag.Table.Columns; }
+                        @for (var i = 0; i < colLimit; i++)
+                        {
+                            <th style="width: 100px">@ViewBag.Table.GetCellAt(0,i)</th>
+                        }
+
+                    </tr>
+                </thead>
+                <tbody>
+                @for (var x = 1; x < colLimit; x++) // for each row
+                {
+                    if (x%2 == 1)
+                    {
+                        <tr>
+                            @for(var y = 0; y < colLimit; y++) // for each column
+                            {
+                                <td>@ViewBag.Table.GetCellAt(x, y)</td>
+                            }
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr class="alt">
+                           @for (var y = 0; y < colLimit; y++)
+                           {
+                                <td>@ViewBag.Table.GetCellAt(x, y)</td>
+                           }
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+

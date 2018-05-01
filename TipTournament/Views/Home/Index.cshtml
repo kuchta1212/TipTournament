@@ -1,0 +1,208 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.Owin
+@using TipTournament.Controllers
+@using TipTournament.Models
+@{
+    ViewBag.Title = "Home Page";
+}
+
+    @if (!Request.IsAuthenticated)
+    {
+        <div class="jumbotron">
+            <h1>Betting Tournament</h1>
+            <p class="lead">Sázecí turnaj pro EURO 2016</p>
+            <p>
+                @Html.ActionLink("Přihlásit se", "Login", "Account", routeValues: null, htmlAttributes: new {id = "loginLink", @class="btn btn-primary btn-lg"})
+                @Html.ActionLink("Pravidla", "Rules", "Home", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-primary btn-lg" })
+
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="jumbotron">
+            <p class="lead">Betting Tournament - Sázecí turnaj pro EURO 2016</p>
+        </div>
+
+        if (!ViewBag.Message.Equals("OK"))
+        {
+            <p class="lead">POSRALO SE TO! ='(</p>
+            <p> @ViewBag.Message </p>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Seznam zápasů</h2>
+                    <div class="datagrid">
+                        <table>
+                            <tbody>
+                                @{ int index = 0; }
+                                @foreach (var match in ViewBag.Matches as List<MatchModel>)
+                            {
+                                if (index == 0)
+                                {
+                                <tr>
+                                    <td>
+                                        @match.TeamOne
+                                    </td>
+                                    <td>
+                                        @match.TeamTwo
+                                    </td>
+                                    <td Id="ResultTag">
+                                        @(@match.Result.IsImported == 1 ? match.Result.ToString() : match.Result.Date)
+                                    </td>
+                                </tr>
+                                    index++;
+                                }
+                                else
+                                {
+                                <tr class="alt">
+                                    <td>
+                                        @match.TeamOne
+                                    </td>
+                                    <td>
+                                        @match.TeamTwo
+                                    </td>
+                                    <td Id="ResultTag">
+                                        @(@match.Result.IsImported == 1 ? match.Result.ToString() : match.Result.Date)
+                                    </td>
+                                </tr>
+                                    index = 0;
+                                }
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h2>Moje výsledky a body</h2>
+                    <div class="datagrid">
+                        <table>
+                            <tbody>
+                                @{ index = 0; }
+                                @foreach (var match in ViewBag.Matches as List<MatchModel>)
+                                {
+                                    if (!ViewBag.EstimatedResults.HasEstimatedResultForMatch(match.Id))
+                                    {
+                                        continue;
+                                    }
+
+                                    if (index == 0)
+                                    {
+                                <tr>
+                                    <td>
+                                        @match.TeamOne
+                                    </td>
+                                    <td>
+                                        @match.TeamTwo
+                                    </td>
+                                    <td Id="ResultTag">
+                                        @ViewBag.EstimatedResults.GetByMatchId(match.Id).ToString()
+                                    </td>
+                                    <td>
+                                        @if (match.Result.IsImported == 1)
+                                        {
+                                            @PointsCounter.CountForView(@match.Result.ToString(), @ViewBag.EstimatedResults.GetByMatchId(match.Id).ToString())
+
+                                        }
+                                        else
+                                        {
+                                            @("?")
+                                        }
+
+                                    </td>
+                                </tr>
+                                        index++;
+                                            }
+                                            else
+                                            {
+                                <tr class="alt">
+                                    <td>
+                                        @match.TeamOne
+                                    </td>
+                                    <td>
+                                        @match.TeamTwo
+                                    </td>
+                                    <td Id="ResultTag">
+                                        @ViewBag.EstimatedResults.GetByMatchId(match.Id).ToString()
+                                    </td>
+                                    <td>
+                                        @if (match.Result.IsImported == 1)
+                                        {
+                                            @PointsCounter.CountForView(@match.Result.ToString(), @ViewBag.EstimatedResults.GetByMatchId(match.Id).ToString())
+
+                                        }
+                                        else
+                                        {
+                                            @("?")
+                                        }
+                                    </td>
+                                </tr>
+                                        index = 0;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h2>Pořadí</h2>
+                    <div class="datagrid">
+                        <table>
+                            <tbody>
+                                @{ index = 1; }
+                                @foreach (var rank in ViewBag.Ranking as List<RankingModel>)
+                                {
+                                    if (@User.Identity.GetUserId().Equals(@rank.UserId))
+                                    {
+                                        <tr class="me">
+                                            <td>
+                                                @index
+                                            </td>
+                                            <td>
+                                                @ViewBag.Users.GetUserName(@rank.UserId)
+                                            </td>
+                                            <td Id="ResultTag">
+                                                @rank.Points
+                                            </td>
+                                        </tr>
+                                    }
+                                    else if (index % 2 == 1)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @index
+                                            </td>
+                                            <td>
+                                                @ViewBag.Users.GetUserName(@rank.UserId)
+                                            </td>
+                                            <td Id="ResultTag">
+                                                @rank.Points
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr class="alt">
+                                            <td>
+                                                @index
+                                            </td>
+                                            <td>
+                                                @ViewBag.Users.GetUserName(@rank.UserId)
+                                            </td>
+                                            <td Id="ResultTag">
+                                                @rank.Points
+                                            </td>
+                                        </tr>
+                                    }
+                                    index++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+                                        }
+                                    }
+
