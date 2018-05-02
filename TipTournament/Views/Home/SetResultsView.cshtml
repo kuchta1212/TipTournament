@@ -17,22 +17,25 @@ else
     <div align="center">
         <h2>Seznam zápasů</h2>
         <div class="datagrid">
+        @using (Ajax.BeginForm("SubmitResults", "Home", new AjaxOptions {UpdateTargetId = "ResultTag"}))
+        {
+            <button class="btn btn-primary btn-lg"> Ulož </button>
             <table>
                 <tbody>
-                @{ var index = 0; }
-                @foreach (var match in ViewBag.Matches as List<MatchModel>)
-                {
-                    if (index == 0)
+                @{
+                    var index = 0;
+                    foreach (var match in ViewBag.Matches as List<MatchModel>)
                     {
-                        using (Ajax.BeginForm("SubmitResults", "Home", new AjaxOptions {UpdateTargetId = "ResultTag"}))
+                        if (index == 0)
                         {
-                            <tr>
+                            <tr id="@match.Id" name="RowId">
                                 <td>
                                     @match.TeamOne
                                 </td>
                                 <td>
                                     @match.TeamTwo
                                 </td>
+
                                 @if (@ViewBag.EstimatedResults.HasEstimatedResultForMatch(match.Id))
                                 {
                                     <td Id="ResultTag">
@@ -48,17 +51,11 @@ else
                                         @Html.DropDownList("Num2", new SelectList(new string[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}))
                                         <textarea id="MatchId" name="MatchId" style="display: none;">@match.Id</textarea>
                                     </td>
-                                    <td>
-                                        <button>Ulož</button>
-                                    </td>
                                 }
                             </tr>
+                            index++;
                         }
-                        index++;
-                    }
-                    else
-                    {
-                        using (Ajax.BeginForm("SubmitResults", "Home", new AjaxOptions {UpdateTargetId = "ResultTag"}))
+                        else
                         {
                             <tr class="alt">
                                 <td>
@@ -77,13 +74,10 @@ else
                                 else
                                 {
                                     <td Id="ResultTag">
-                                        @Html.DropDownList("Num1", new SelectList(new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }))
+                                        @Html.DropDownList("Num1", new SelectList(new string[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}))
                                         :
-                                        @Html.DropDownList("Num2", new SelectList(new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }))
+                                        @Html.DropDownList("Num2", new SelectList(new string[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}))
                                         <textarea id="MatchId" name="MatchId" style="display: none;">@match.Id</textarea>
-                                    </td>
-                                    <td>
-                                        <button>Ulož</button>
                                     </td>
                                 }
                             </tr>
@@ -91,9 +85,12 @@ else
                         }
                     }
                 }
+
                 </tbody>
             </table>
-        </div>
+            <button class="btn btn-primary btn-lg"> Ulož </button>
+        }
+          </div>
     </div>
 }
 

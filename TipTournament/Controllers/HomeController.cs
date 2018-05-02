@@ -69,16 +69,23 @@ namespace TipTournament.Controllers
         [AllowAnonymous]
         public ActionResult SubmitResults()
         {
-            int one = Int32.Parse(Request["Num1"]);
-            int two = Int32.Parse(Request["Num2"]);
-            int id = Int32.Parse(Request["MatchId"]);
+            var len = Request.Form.GetValues("MatchId").Length;
+            var num1 = Request.Form.GetValues("Num1");
+            var num2 = Request.Form.GetValues("Num2");
+            var mId = Request.Form.GetValues("MatchId");
+ 
+            for (var i = 0; i < len; i++)
+            {
+                int one = Int32.Parse(num1[i]);
+                int two = Int32.Parse(num2[i]);
+                int id = Int32.Parse(mId[i]);
 
-            string userId = User.Identity.GetUserId();
+                string userId = User.Identity.GetUserId();
 
+                EstimatedResultController.AddEstimatedResult(userId, id, one, two);
+            }
 
-            EstimatedResultController.AddEstimatedResult(userId, id, one, two);
-
-            return RedirectToAction("SetEstimatedResults", "Home");
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult AllTips()

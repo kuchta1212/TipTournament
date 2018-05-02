@@ -18,7 +18,7 @@ namespace TipTournament.Controllers
     [Authorize]
     public class AdminController : Controller
     {
-        private const string urlAddress = "http://fotbal.idnes.cz/databanka.aspx?t=los&id=1000414";
+        private const string urlAddress = "https://fotbal.idnes.cz/databanka.aspx?t=los&id=1000439";
         private PointsCounter pointsCounter = new PointsCounter();
 
         public ActionResult Index()
@@ -68,6 +68,10 @@ namespace TipTournament.Controllers
                         counter++;
                     }
                     else if (counter == 2)
+                    {
+                        counter++;
+                    }
+                    else if (counter == 3)
                     {
                         result = node.InnerText;
                         counter = 0;
@@ -208,9 +212,6 @@ namespace TipTournament.Controllers
         {
             int id = Int32.Parse(Request["PaymentId"]);
             var isPayed = Request["isPayed"];
-
-            
-
 
             PayedController.AddPayment(id);
 

@@ -23,7 +23,7 @@
             @if (Request.IsAuthenticated)
             {
                 <ul class="nav navbar-nav">
-                    @*                    <li>@Html.ActionLink("Import výsledků", "SetEstimatedResults", "Home", routeValues: null, htmlAttributes: new {id = "importEstimatedResut"})</li>*@
+                    <li>@Html.ActionLink("Import výsledků", "SetEstimatedResults", "Home", routeValues: null, htmlAttributes: new {id = "importEstimatedResut"})</li>
                     <li>@Html.ActionLink("Ostatní tipy","AllTips","Home", routeValues: null, htmlAttributes: new {id = "tipsLink"})</li>
                     <li>@Html.ActionLink("Pravidla", "Rules", "Home", routeValues: null, htmlAttributes: new {id = "rulesLink"})</li>
                 </ul>

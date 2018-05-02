@@ -9,8 +9,8 @@
     @if (!Request.IsAuthenticated)
     {
         <div class="jumbotron">
-            <h1>Betting Tournament</h1>
-            <p class="lead">Sázecí turnaj pro EURO 2016</p>
+            <h1>Tip Tournament</h1>
+            <p class="lead">Sázecí turnaj pro WordCup 2018</p>
             <p>
                 @Html.ActionLink("Přihlásit se", "Login", "Account", routeValues: null, htmlAttributes: new {id = "loginLink", @class="btn btn-primary btn-lg"})
                 @Html.ActionLink("Pravidla", "Rules", "Home", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-primary btn-lg" })
@@ -21,7 +21,7 @@
     else
     {
         <div class="jumbotron">
-            <p class="lead">Betting Tournament - Sázecí turnaj pro EURO 2016</p>
+            <p class="lead">Betting Tournament - Sázecí turnaj pro WordCup 2018</p>
         </div>
 
         if (!ViewBag.Message.Equals("OK"))
