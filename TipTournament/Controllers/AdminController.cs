@@ -18,7 +18,7 @@ namespace TipTournament.Controllers
     [Authorize]
     public class AdminController : Controller
     {
-        private const string urlAddress = "https://fotbal.idnes.cz/databanka.aspx?t=los&id=1000439";
+        public const string urlAddress = "https://fotbal.idnes.cz/databanka.aspx?t=los&id=1000439";
         private PointsCounter pointsCounter = new PointsCounter();
 
         public ActionResult Index()
@@ -189,7 +189,7 @@ namespace TipTournament.Controllers
 
         }
 
-        private class Record
+        internal class Record
         {
             public string One { get; set; }
             public string Two { get; set; }
