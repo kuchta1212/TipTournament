@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using log4net;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -21,6 +22,8 @@ namespace TipTournament.Controllers
     {
         private Identity.ApplicationSignInManager _signInManager;
         private Identity.ApplicationUserManager _userManager;
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(AccountController));
 
         private const string _passwordPostFix = "Tt1.";
 
@@ -66,6 +69,8 @@ namespace TipTournament.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            log.Info($"User {model.UserName}, just logged in");
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -78,9 +83,7 @@ namespace TipTournament.Controllers
                     SignInManager.PasswordSignInAsync(model.UserName, model.Password+_passwordPostFix, model.RememberMe,
                         shouldLockout: false);
 
-            bool isAdmin = false;
-            if (model.UserName.Equals("Admin") && model.Password.Equals("123"))
-                isAdmin = true;
+            var isAdmin = model.UserName.Equals("Admin") && model.Password.Equals("123");
 
             switch (result)
             {
@@ -112,6 +115,8 @@ namespace TipTournament.Controllers
         {
             if (ModelState.IsValid)
             {
+                log.Info($"New registration user {model.UserName}");
+
                 var user = new ApplicationUser {UserName = model.UserName};
                 model.ConfirmPassword = model.ConfirmPassword + _passwordPostFix;
                 user.Email = model.UserName+"@"+model.Password+"com";

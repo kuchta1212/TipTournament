@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using HtmlAgilityPack;
+using log4net;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using TipTournament.App_Start;
@@ -20,6 +21,8 @@ namespace TipTournament.Controllers
     {
         public const string urlAddress = "https://fotbal.idnes.cz/databanka.aspx?t=los&id=1000439";
         private PointsCounter pointsCounter = new PointsCounter();
+        private static readonly ILog log = LogManager.GetLogger(typeof(AdminController));
+
 
         public ActionResult Index()
         {
@@ -30,6 +33,7 @@ namespace TipTournament.Controllers
 
         private List<Record> LoadData()
         {
+            log.Info("Loading data...");
                         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlAddress);
                         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                         List<Record> matches = new List<Record>();
@@ -79,6 +83,7 @@ namespace TipTournament.Controllers
                     }
                 }
             }
+            log.Info(string.Format("{0} matches loaded", matches.Count));
             return matches;
         }
 
@@ -143,6 +148,7 @@ namespace TipTournament.Controllers
             }
             catch (Exception e)
             {
+                log.Error("Error in importing results");
                 return e.Message;
             }
             return newResults.Count.ToString();

@@ -6,17 +6,25 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
+using log4net;
+using log4net.Config;
 
 namespace TipTournament
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(Startup));
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            XmlConfigurator.Configure();
+            log.Info("Application running....");
         }
 
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)

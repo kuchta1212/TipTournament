@@ -1,4 +1,6 @@
-﻿using Microsoft.Owin;
+﻿using log4net;
+using log4net.Config;
+using Microsoft.Owin;
 using Owin;
 using Quartz;
 using Quartz.Impl;
@@ -9,6 +11,7 @@ namespace TipTournament
 {
     public partial class Startup
     {
+       
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
@@ -19,7 +22,7 @@ namespace TipTournament
 
             var jobDetail = JobBuilder.Create<ImportJob>().Build();
             var trigger =
-                TriggerBuilder.Create().WithSimpleSchedule(x => x.WithIntervalInSeconds(15).RepeatForever()).Build();
+                TriggerBuilder.Create().WithSimpleSchedule(x => x.WithIntervalInHours(2).RepeatForever()).Build();
 
             var scheduleJob = scheduler.ScheduleJob(jobDetail, trigger);
 

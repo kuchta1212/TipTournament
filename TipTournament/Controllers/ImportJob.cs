@@ -10,20 +10,24 @@ using System.Web.Mvc;
 using HtmlAgilityPack;
 using Quartz;
 using TipTournament.Models;
+using log4net;
 
 namespace TipTournament.Controllers
 {
     public class ImportJob : IJob
     {
-        public Task Execute(IJobExecutionContext context)
-        {
-            var result = Import();
-            return null;
 
+        private static readonly ILog log = LogManager.GetLogger(typeof(ImportJob));
+
+        public async Task Execute(IJobExecutionContext context)
+        {
+            log.Info("Starting automatic load...");
+            var result = await Import();
+            log.Info("Automatic load done!");
         }
 
 
-        private List<AdminController.Record> LoadData()
+        private async Task<List<AdminController.Record>> LoadData()
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(AdminController.urlAddress);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -78,12 +82,12 @@ namespace TipTournament.Controllers
         }
 
 
-        public string Import()
+        public async Task<string> Import()
         {
             Dictionary<int, ResultModel> newResults = new Dictionary<int, ResultModel>();
             try
             {
-                List<AdminController.Record> loadData = this.LoadData();
+                List<AdminController.Record> loadData = await this.LoadData();
 
 
 
@@ -111,6 +115,7 @@ namespace TipTournament.Controllers
             }
             catch (Exception e)
             {
+                log.Error("error in loading data", e);
                 return e.Message;
             }
             return newResults.Count.ToString();
