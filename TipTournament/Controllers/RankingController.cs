@@ -31,6 +31,8 @@ namespace TipTournament.Controllers
 
         public static void AddUser(string userId)
         {
+            if (string.IsNullOrEmpty(userId)) return;
+
             rankingDbContext.Ranking.Add(new RankingModel() {UserId = userId, Points = 0});
             SaveChanges();
         }

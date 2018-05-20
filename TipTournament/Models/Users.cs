@@ -21,7 +21,11 @@ namespace TipTournament.Models
 
         public string GetUserName(string userId)
         {
-            return users.FirstOrDefault(item => item.Id.Equals(userId)).UserName;
+            var user = users.FirstOrDefault(item => item.Id.Equals(userId));
+            if(user != null)
+                return user.UserName;
+
+            return null;
         }
 
 
