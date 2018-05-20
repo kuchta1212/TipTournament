@@ -230,7 +230,12 @@ namespace TipTournament.Controllers
 
         public ActionResult DeleteMatch(int matchId)
         {
-            MatchesController.DeleteMatch(matchId);
+            var match = MatchesController.GetMatches().First(x => x.Id == matchId);
+
+            if (ResultController.GetResult(match.ResultId).IsImported != 1)
+            {
+                MatchesController.DeleteMatch(matchId);
+            }
 
             return RedirectToAction("Index", "Admin");
         }
