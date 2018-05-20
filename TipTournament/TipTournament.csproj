@@ -307,6 +307,7 @@
     <Content Include="Views\Home\Rules.cshtml" />
     <Content Include="Views\Admin\SetPayment.cshtml" />
     <Content Include="Views\Home\AllTips.cshtml" />
+    <Content Include="Views\Home\OverDeadlineView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

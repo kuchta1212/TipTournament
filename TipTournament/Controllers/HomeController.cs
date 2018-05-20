@@ -50,6 +50,11 @@ namespace TipTournament.Controllers
 
         public ActionResult SetEstimatedResults()
         {
+            if (DateTime.Now >= new DateTime(2018, 6, 14, 17, 0, 0))
+            {
+                return View("OverDeadlineView");
+            }
+
             try
             {
                 ViewBag.Matches = MatchesController.GetMatches();
