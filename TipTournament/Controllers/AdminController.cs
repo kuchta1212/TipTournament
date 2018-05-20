@@ -26,7 +26,11 @@ namespace TipTournament.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Message = "Init page";
+            ViewBag.Message = "Admin page";
+            ViewBag.Users = HttpContext.GetOwinContext()
+                .GetUserManager<Identity.ApplicationUserManager>()
+                .Users.ToList();
+            ViewBag.Matches = MatchesController.GetMatches();
             return View();
         }
 
@@ -222,6 +226,28 @@ namespace TipTournament.Controllers
             PayedController.AddPayment(id);
 
             return RedirectToAction("SetPayment", "Admin");
+        }
+
+        public ActionResult DeleteMatch(int matchId)
+        {
+            MatchesController.DeleteMatch(matchId);
+
+            return RedirectToAction("Index", "Admin");
+        }
+
+        public ActionResult DeleteUser(string userId, string userName)
+        {
+            log.Info($"Deleting user with userNAme: {userName}");
+
+            var user = HttpContext.GetOwinContext()
+                .GetUserManager<Identity.ApplicationUserManager>()
+                .Users.First(x => x.Id.Equals(userId));
+
+            HttpContext.GetOwinContext()
+                .GetUserManager<Identity.ApplicationUserManager>()
+                .Delete(user);
+
+            return RedirectToAction("Index", "Admin");
         }
     }
 }

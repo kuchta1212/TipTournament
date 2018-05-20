@@ -47,5 +47,15 @@ namespace TipTournament.Controllers
         {
             return GetMatch(one, two) != null;
         }
+
+        public static void DeleteMatch(int matchId)
+        {
+            var matchModels = matchesContext.Matches.First(x => x.Id == matchId);
+            matchesContext.Matches.Remove(matchModels);
+            matchesContext.SaveChanges();
+
+        }
+
+
     }
 }

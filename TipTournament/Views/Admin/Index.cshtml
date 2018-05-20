@@ -1,7 +1,78 @@
-﻿    @{
+﻿@using TipTournament.Models
+    @{
         ViewBag.Title = "Index";
         Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     }
 
 
     <h2>@ViewBag.Message</h2>
+
+
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Seznam zápasů</h2>
+            <div class="datagrid">
+                <table>
+                    <tbody>
+                    @{ var index = 0; }
+                    @foreach (var match in ViewBag.Matches as List<MatchModel>)
+                    {
+                        if (index == 0)
+                        {
+                            <tr>
+                                <td>@match.TeamOne + @match.TeamTwo </td>
+                                <td>
+                                    @Html.ActionLink("Samzat", "DeleteMatch", "Admin", routeValues: new { matchId = match.Id }, htmlAttributes: new { @id = "delBtn", @class = "btn btn-primary btn-lg btn-block" })
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                        else
+                        {
+                            <tr class="alt">
+                                <td>@match.TeamOne + @match.TeamTwo </td>
+                                <td>
+                                    @Html.ActionLink("Samzat", "DeleteMatch", "Admin", routeValues: new { matchId = match.Id }, htmlAttributes: new { @id = "delBtn", @class = "btn btn-primary btn-lg btn-block" })
+                                </td>
+                            </tr>
+                            index = 0;
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <div class="col-md-4">
+        <h2>Seznam uživatelů</h2>
+        <div class="datagrid">
+            <table>
+                <tbody>
+                    @foreach (var user in ViewBag.Users as List<ApplicationUser>)
+                    {
+                        if (index == 0)
+                        {
+                            <tr>
+                                <td>@user.UserName </td>
+                                <td>
+                                    @Html.ActionLink("Samzat", "DeleteUser", "Admin", routeValues: new { userId = user.Id, username= user.UserName }, htmlAttributes: new { @id = "delBtn", @class = "btn btn-primary btn-lg btn-block" })
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                        else
+                        {
+                            <tr class="alt">
+                                <td>@user.UserName</td>
+                                <td>
+                                    @Html.ActionLink("Samzat", "DeleteUser", "Admin", routeValues: new { userId = user.Id, username = user.UserName }, htmlAttributes: new { @id = "delBtn", @class = "btn btn-primary btn-lg btn-block" })
+                                </td>
+                            </tr>
+                            index = 0;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
