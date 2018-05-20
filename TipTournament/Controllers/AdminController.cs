@@ -208,7 +208,6 @@ namespace TipTournament.Controllers
 
         public ActionResult SetPayment()
         {
-            ViewBag.Payment = PayedController.GetPayedList();
             ViewBag.Users = new Users(HttpContext.GetOwinContext()
                    .GetUserManager<Identity.ApplicationUserManager>()
                    .Users.ToList());
@@ -216,14 +215,10 @@ namespace TipTournament.Controllers
         }
 
 
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult SubmitPayment()
+        public ActionResult SubmitPayment(string userId)
         {
-            int id = Int32.Parse(Request["PaymentId"]);
-            var isPayed = Request["isPayed"];
 
-            PayedController.AddPayment(id);
+            PayedController.AddPayment(userId);
 
             return RedirectToAction("SetPayment", "Admin");
         }

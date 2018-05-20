@@ -27,12 +27,14 @@ namespace TipTournament.Controllers
             return model != null && model.IsPayed;
         }
 
-        public static void AddPayment(int id)
+        public static void AddPayment(string userId)
         {
-            PayedModel payedModel = GetPayedList().FirstOrDefault(item => item.Id == id);
-            if (payedModel == null)
-                return;
-            payedModel.IsPayed = true;
+            var payedModel = new PayedModel
+            {
+                UserId = userId,
+                IsPayed = true
+            };
+            payedDbContext.Payed.Add(payedModel);
             Save();
         }
 

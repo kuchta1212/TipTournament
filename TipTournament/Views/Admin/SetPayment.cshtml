@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
+@using TipTournament.Controllers
 @using TipTournament.Models
 
 @{
@@ -12,47 +13,43 @@
         <tbody>
         @{ int index = 1; }
 
-            @foreach (var payment in ViewBag.Payment as List<PayedModel>)
+            @foreach (var user in ViewBag.Users.GetUsers() as List<ApplicationUser>)
             {
                 if (index == 0)
                 {
-                    using (Ajax.BeginForm("SubmitPayment", "Admin", new AjaxOptions {UpdateTargetId = "ResultTag"}))
-                    {
-                        <tr>
-                            <td>
-                                @ViewBag.Users.GetUserName(@payment.UserId)
-                            </td>
-                            <td Id="ResultTag">
-                                <input id="isPayed" name="isPayed" type="checkbox" checked="@payment.IsPayed">
-                                <textarea id="PaymentId" name="PaymentId" style="display: none;">@payment.Id</textarea>
-                            </td>
-                            <td>
-                                <button>Ulož</button>
-                            </td>
-
-                        </tr>
-                    }
+                    <tr>
+                        <td>
+                            @user.UserName
+                        </td>
+                            
+                        @if (!PayedController.Payed(user.Id))
+                        {
+                            <td> @Html.ActionLink("Zaplaceno", "SubmitPayment", "Admin", routeValues: new {userId = user.Id}, htmlAttributes: new {@id = "saveBtn", @class = "btn btn-primary btn-lg btn-block"}) </td>
+                        }
+                        else
+                        {
+                            <td>OK</td>
+                        }
+                    </tr>
                     index++;
                 }
                 else
                 {
-                    using (Ajax.BeginForm("SubmitPayment", "Admin", new AjaxOptions {UpdateTargetId = "ResultTag"}))
-                    {
-                        <tr class="alt">
-                            <td>
-                               @ViewBag.Users.GetUserName(@payment.UserId)
-                            </td>
-                            <td Id="ResultTag">
-                                <input type="checkbox" checked="@payment.IsPayed">
-                                <textarea id="PaymentId" name="PaymentId" style="display: none;">@payment.Id</textarea>
-                            </td>
-                            <td>
-                                <button>Ulož</button>
-                            </td>
-
-                        </tr>
-                        index = 0;
-                    }
+                    <tr class="alt">
+                        <td>
+                            @user.UserName
+                        </td>
+                            
+                        @if (!PayedController.Payed(user.Id))
+                        {
+                            <td> @Html.ActionLink("Zaplaceno", "SubmitPayment", "Admin", routeValues: new {userId = user.Id}, htmlAttributes: new {@id = "saveBtn", @class = "btn btn-primary btn-lg btn-block"}) </td>
+                        }
+                        else
+                        {
+                            <td>OK</td>
+                        }
+                    </tr>
+                    index = 0;
                 }
             }
         </tbody>
