@@ -44,5 +44,15 @@ namespace TipTournament.Controllers
         {
             return GetRankingForUser(userId) != null;
         }
+
+        public static void DeleteUser(string userId)
+        {
+            var list = rankingDbContext.Ranking.Where(x => x.UserId.Equals(userId)).ToList();
+            foreach (var model in list)
+            {
+                rankingDbContext.Ranking.Remove(model);
+            }
+            rankingDbContext.SaveChanges();
+        }
     }
 }

@@ -36,6 +36,17 @@ namespace TipTournament.Controllers
             Save();
         }
 
+        public static void RemoveUser(string userId)
+        {
+            var model = payedDbContext.Payed.FirstOrDefault(x => x.UserId.Equals(userId));
+            if (model != null)
+            {
+                payedDbContext.Payed.Remove(model);
+                payedDbContext.SaveChanges();
+            }
+
+        }
+
         public static void Save()
         {
             payedDbContext.SaveChanges();

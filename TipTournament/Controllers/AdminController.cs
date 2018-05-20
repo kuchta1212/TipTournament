@@ -239,6 +239,10 @@ namespace TipTournament.Controllers
         {
             log.Info($"Deleting user with userNAme: {userName}");
 
+            RankingController.DeleteUser(userId);
+            PayedController.RemoveUser(userId);
+            EstimatedResultController.RemoveUser(userId);
+
             var user = HttpContext.GetOwinContext()
                 .GetUserManager<Identity.ApplicationUserManager>()
                 .Users.First(x => x.Id.Equals(userId));

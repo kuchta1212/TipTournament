@@ -39,6 +39,17 @@ namespace TipTournament.Controllers
             return GetEstimatedResultModelsForUser(userId).FirstOrDefault(item => item.MatchId == matchId);
         }
 
+        public static void RemoveUser(string userId)
+        {
+            var estimatedModels = _estimatedContext.EstimatedResults.Where(x => x.UserId.Equals(userId));
+            foreach (var model in estimatedModels)
+            {
+                _estimatedContext.EstimatedResults.Remove(model);
+            }
+
+            _estimatedContext.SaveChanges();
+        }
+
         public static void SaveChanges()
         {
             _estimatedContext.SaveChanges();
