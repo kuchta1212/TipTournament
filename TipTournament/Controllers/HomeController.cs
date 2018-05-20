@@ -55,6 +55,11 @@ namespace TipTournament.Controllers
                 return View("OverDeadlineView");
             }
 
+            if (EstimatedResultController.GetEstimatedResultModelsForUser(User.Identity.GetUserId()).Any())
+            {
+                return View("JustOnceView");
+            }
+
             try
             {
                 ViewBag.Matches = MatchesController.GetMatches();
