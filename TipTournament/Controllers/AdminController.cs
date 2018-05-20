@@ -232,12 +232,12 @@ namespace TipTournament.Controllers
         {
             var match = MatchesController.GetMatches().First(x => x.Id == matchId);
 
-            if (ResultController.GetResult(match.ResultId).IsImported != 1)
+            if (ResultController.GetResult(match.ResultId).IsImported == 1)
             {
                 ResultController.DeleteResultForMatch(match.ResultId);
-                MatchesController.DeleteMatch(matchId);
             }
 
+            MatchesController.DeleteMatch(matchId);
             return RedirectToAction("Index", "Admin");
         }
 
