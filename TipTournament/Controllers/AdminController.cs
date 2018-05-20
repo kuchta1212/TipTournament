@@ -234,6 +234,7 @@ namespace TipTournament.Controllers
 
             if (ResultController.GetResult(match.ResultId).IsImported != 1)
             {
+                ResultController.DeleteResultForMatch(match.ResultId);
                 MatchesController.DeleteMatch(matchId);
             }
 

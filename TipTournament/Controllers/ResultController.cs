@@ -31,5 +31,10 @@ namespace TipTournament.Controllers
             return resultContext.SaveChanges();
         }
 
+        public static void DeleteResultForMatch(int matchResultId)
+        {
+            resultContext.Results.Remove(GetResult(matchResultId));
+            resultContext.SaveChanges();
+        }
     }
 }

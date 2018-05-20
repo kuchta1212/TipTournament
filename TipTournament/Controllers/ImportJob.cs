@@ -108,6 +108,7 @@ namespace TipTournament.Controllers
                 }
                 if (newResults.Count > 0)
                 {
+                    log.Info($"New results were loaded. Count: {newResults.Count}");
                     new PointsCounter().CountPoints(newResults);
                     ResultController.SaveChanges();
                 }
