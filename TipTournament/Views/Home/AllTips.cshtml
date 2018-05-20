@@ -13,7 +13,8 @@
             <table>
                 <thead>
                     <tr>
-                        @{ var colLimit = ViewBag.Table.Columns; }
+                        @{ var colLimit = ViewBag.Table.Columns;
+                            var rowLimit = ViewBag.Table.Rows; }
                         @for (var i = 0; i < colLimit; i++)
                         {
                             <th style="width: 100px">@ViewBag.Table.GetCellAt(0,i)</th>
@@ -22,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                @for (var x = 1; x < colLimit; x++) // for each row
+                @for (var x = 1; x < rowLimit; x++) // for each row
                 {
                     if (x%2 == 1)
                     {

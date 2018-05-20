@@ -95,6 +95,11 @@ namespace TipTournament.Controllers
 
         public ActionResult AllTips()
         {
+            if (DateTime.Now < new DateTime(2018, 6, 14, 17, 0, 0))
+            {
+                return View("BeforeDeadlineView");
+            }
+
             TipsTable tipsTable = new TipsTable(HttpContext.GetOwinContext()
                     .GetUserManager<Identity.ApplicationUserManager>()
                     .Users.ToList());
