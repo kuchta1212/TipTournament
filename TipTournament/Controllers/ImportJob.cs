@@ -124,10 +124,11 @@ namespace TipTournament.Controllers
 
         private bool ParseForResult(ResultModel model, string result)
         {
-            if (model.IsImported == 1)
+            if (model.IsImported == 1 || result.Length <= 12)
                 return false;
 
-            string[] array = result.Split(':');
+            var helpArray = result.Split(' ');
+            string[] array = helpArray[0].Split(':');
             int one = -1, two = -1;
             try
             {
@@ -140,8 +141,29 @@ namespace TipTournament.Controllers
                 return false;
             }
 
-            //here I know its definetly new information for me
+            try
+            {
+                //is after the match
+                var datestr = helpArray[1].Substring(1);
+                var date = datestr.Split('.');
+                var datetime = new DateTime(2018, Int32.Parse(date[1]), Int32.Parse(date[0]));
 
+                if (datetime == DateTime.Now.Date)
+                {
+                    var timestr = helpArray[2].Remove(helpArray[2].IndexOf(')'));
+                    var time = timestr.Split(':');
+                    var timespan = new TimeSpan(Int32.Parse(time[0]), Int32.Parse(time[1]), 0);
+                    //game is not over yet
+                    if (DateTime.Now.AddHours(-2).TimeOfDay < timespan)
+                        return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error when parsing starting date for match");
+            }
+
+            //here I know its definetly new information for me
             model.ValueOne = one;
             model.ValueTwo = two;
             model.IsImported = 1;
