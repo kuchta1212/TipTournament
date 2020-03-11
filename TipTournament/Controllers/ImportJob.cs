@@ -27,29 +27,33 @@ namespace TipTournament.Controllers
         }
 
 
-        private async Task<List<AdminController.Record>> LoadData()
+        private Task<List<AdminController.Record>> LoadData()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(AdminController.urlAddress);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            List<AdminController.Record> matches = new List<AdminController.Record>();
+            var request = (HttpWebRequest)WebRequest.Create(AdminController.urlAddress);
+            var response = (HttpWebResponse)request.GetResponse();
+            var matches = new List<AdminController.Record>();
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                Stream receiveStream = response.GetResponseStream();
-                StreamReader readStream = null;
+                var receiveStream = response.GetResponseStream();
 
-                readStream = response.CharacterSet == null
+                var html = string.Empty;
+                using (var readStream = response.CharacterSet == null
                     ? new StreamReader(receiveStream)
-                    : new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
+                    : new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet)))
+                {
+                    html = readStream.ReadToEnd();
+                }
 
-                string html = readStream.ReadToEnd();
+                
                 //            using (StreamReader sr = new StreamReader("C:\\Users\\kucha\\Desktop\\idnes.txt"))
                 //            {
                 //                String html = sr.ReadToEnd();
-                HtmlDocument htmlDocument = new HtmlDocument();
+                
+                var htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(html);
-                HtmlNode htmlNode = htmlDocument.GetElementbyId("table-los");
-                HtmlNodeCollection collection = htmlNode.SelectNodes("//td[@class='tac']");
+                var htmlNode = htmlDocument.GetElementbyId("table-los");
+                var collection = htmlNode.SelectNodes("//td[@class='tac']");
                 int counter = 0;
                 string one = String.Empty;
                 string two = String.Empty;
@@ -78,7 +82,7 @@ namespace TipTournament.Controllers
                     }
                 }
             }
-            return matches;
+            return Task.FromResult(matches);
         }
 
 
@@ -160,7 +164,7 @@ namespace TipTournament.Controllers
             }
             catch (Exception ex)
             {
-                log.Error("Error when parsing starting date for match");
+                log.Error("Error when parsing starting date for match. With exception:"+ ex);
             }
 
             //here I know its definetly new information for me

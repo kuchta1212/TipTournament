@@ -19,7 +19,7 @@ namespace TipTournament.Controllers
     [Authorize]
     public class AdminController : Controller
     {
-        public const string urlAddress = "https://fotbal.idnes.cz/databanka.aspx?t=los&id=1000439";
+        public const string urlAddress = "https://www.idnes.cz/fotbal/databanka/euro-2020-los.Umli48513";
         private PointsCounter pointsCounter = new PointsCounter();
         private static readonly ILog log = LogManager.GetLogger(typeof(AdminController));
 
@@ -38,23 +38,22 @@ namespace TipTournament.Controllers
         private List<Record> LoadData()
         {
             log.Info("Loading data...");
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlAddress);
-                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                        List<Record> matches = new List<Record>();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlAddress);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            List<Record> matches = new List<Record>();
 
-                        if (response.StatusCode == HttpStatusCode.OK)
-                        {
-                            Stream receiveStream = response.GetResponseStream();
-                            StreamReader readStream = null;
-            
-                            readStream = response.CharacterSet == null
-                                ? new StreamReader(receiveStream)
-                                : new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
-            
-                            string html = readStream.ReadToEnd();
-//            using (StreamReader sr = new StreamReader("C:\\Users\\kucha\\Desktop\\idnes.txt"))
-//            {
-//                String html = sr.ReadToEnd();
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                Stream receiveStream = response.GetResponseStream();
+
+                var html = string.Empty;
+                using (var readStream = response.CharacterSet == null
+                    ? new StreamReader(receiveStream)
+                    : new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet)))
+                {
+                    html = readStream.ReadToEnd();
+                }
+
                 HtmlDocument htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(html);
                 HtmlNode htmlNode = htmlDocument.GetElementbyId("table-los");
@@ -76,10 +75,6 @@ namespace TipTournament.Controllers
                         counter++;
                     }
                     else if (counter == 2)
-                    {
-                        counter++;
-                    }
-                    else if (counter == 3)
                     {
                         result = node.InnerText;
                         counter = 0;
@@ -210,7 +205,7 @@ namespace TipTournament.Controllers
             }
             catch (Exception ex)
             {
-                log.Error("Error when parsing starting date for match");
+                log.Error("Error when parsing starting date for match. With Exception:" + ex);
             }
 
             //here I know its definetly new information for me
